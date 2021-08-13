@@ -1,0 +1,8 @@
+<story>  
+    <para style="h1"> Product Availability </para>  
+    <para style="h2">{{today.strftime('%d %B %Y')}}</para>  
+  
+    {{for q in questions}}  
+        <para style="prod_name">{{i(q.name)}}</para>  
+    {{endfor}}  
+</story>  
