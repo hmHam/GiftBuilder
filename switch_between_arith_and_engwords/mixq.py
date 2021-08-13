@@ -4,7 +4,7 @@ import random
 import ui
 import numpy as np
 import sqlite3
-con = sqlite3.connect('switch_between_arith_and_engwords/eng_words.db')
+con = sqlite3.connect('eng_words.db')
 cur = con.cursor()
 
 # 単語の読み込み
