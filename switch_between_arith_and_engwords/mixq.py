@@ -12,13 +12,34 @@ TABLE_NAME = 'TOEFL_2500_BASE'
 # TABLE_NAME = 'TOEFL_2500_ADVANCE'
 cur.execute('select * from {}'.format(TABLE_NAME))
 words = cur.fetchall()
+chunk = random.sample(words, 12)
 cur.close()
 
 Q_NUM_IDX = 0
 ENG_WORD_IDX = 1
 JP_WORD_IDX = 2
 
-print(words)
+def next_words(sender):
+	label = sender.superview['label1']
+	tb = sender.superview['table']
+	
+	global chunk
+	if len(chunk) == 0:
+		chunk = random.sample(words, 12)
+	label.text = '%d/12' % len(chunk)
+	next_q = []
+	for _ in range(3):
+		w = chunk.pop()
+		eng_w = w[ENG_WORD_IDX]
+		next_q.append(eng_w)
+		jp_w = w[JP_WORD_IDX]
+		next_q.append(jp_w[:30])
+		next_q.append('' if len(jp_w) < 30 else jp_w[30:])
+	del next_q[-1]
+	tb.data_source = ui.ListDataSource(next_q)
+	
+	tb.data_source.font = ('<system>', 12)
+	tb.reload_data()
 
 # 音声読み上げ => 音声入力待機
 # 音声入力 => 正解判定
@@ -105,5 +126,6 @@ def main():
    
 if __name__ == '__main__':
  v = ui.load_view()
+ v['button1'].action(v['button1'])
  v.present('sheet')
  main()
