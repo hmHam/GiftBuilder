@@ -51,11 +51,11 @@ def sub():
  return ans
 
 def mul():
- x = random.randint(*(2, 10))
- if x >= 20:
-   y = random.randint(*(2, 10))
- else:
-  y = random.randint(*(2, 10))
+ x = random.randint(*(2, 50))
+ y = random.randint(*(2, 10))
+ xy = [x, y]
+ random.shuffle(xy)
+ x, y = xy
  speech.say("%d times %d equals?" % (x, y))
  ans = x * y
  time.sleep(Base * weight)
