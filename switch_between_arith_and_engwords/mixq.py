@@ -35,10 +35,9 @@ def next_words(sender):
 		jp_w = w[JP_WORD_IDX]
 		next_q.append(jp_w[:30])
 		next_q.append('' if len(jp_w) < 30 else jp_w[30:])
-	del next_q[-1]
 	tb.data_source = ui.ListDataSource(next_q)
 	
-	tb.data_source.font = ('<system>', 12)
+	tb.data_source.font = ('<system>', 13)
 	tb.reload_data()
 
 # 音声読み上げ => 音声入力待機
@@ -47,14 +46,26 @@ def next_words(sender):
 Base = 3
 weight = 1.5
 weight1 = 1.5
-
+# 10の倍数は計算が簡単なので省く
+dice_3_10 = [i for i in range(
+	3, 11) if i % 10 != 0]
+	
+dice_11_100 = [i for i in range(
+	10, 100) if i % 10 != 0]
+	
+dice_3_100 = [i for i in range(
+	3, 100) if i % 10 != 0]
+	
+dice_2_50 = [i for i in range(
+	2, 50) if i % 10 != 0]
+	
 #TODO: interval とx, yの値を取得する範囲を入力する
 #      UIを作る
 
 def add():
  '''足し算の処理'''
- x = random.randint(*(2, 100))
- y = random.randint(*(2, 100))
+ x = random.choice(dice_11_100)
+ y = random.choice(dice_11_100)
  speech.say("%d plus %d equals?" % (x, y))
  ans = x + y
  time.sleep(weight1 * Base)
@@ -63,8 +74,8 @@ def add():
     
 def sub():
  '''引き算の処理'''
- x = random.randint(*(2, 100))
- y = random.randint(*(2, 100))
+ x = random.choice(dice_11_100)
+ y = random.choice(dice_11_100)
  speech.say("%d minus %d equals?" % (x, y))
  ans = x - y
  time.sleep(weight1 * Base)
@@ -72,8 +83,8 @@ def sub():
  return ans
 
 def mul():
- x = random.randint(*(2, 50))
- y = random.randint(*(2, 10))
+ x = random.choice(dice_2_50)
+ y = random.choice(dice_3_10)
  xy = [x, y]
  random.shuffle(xy)
  x, y = xy
@@ -84,19 +95,17 @@ def mul():
  return ans
 
 def div():
- x = random.randint(*(3, 100))
- y = random.randint(*(2, 10))
+ x = random.choice(dice_3_100)
+ y = random.choice(dice_3_10)
  speech.say("%d devided by %d equals?" % (x, y))
  ans = (x / y, x % y)
  time.sleep(Base * weight)
  speech.say("%d and the remainder is %d" % (ans[0], ans[1]))
  return ans
 
-method_list = [
- add,
- sub,
- mul,
- div,
+method_list = [add, sub,
+# mul,
+# div
 ]
 
 import time
