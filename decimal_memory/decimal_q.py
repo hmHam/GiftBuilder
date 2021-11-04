@@ -11,6 +11,11 @@ from reportlab.lib.units import mm
 from reportlab.pdfbase.pdfmetrics import registerFont
 from reportlab.pdfbase.ttfonts import TTFont
  
+def question_index(i, j, w_block, h_block, state):
+    if state == 0:
+        return w_block * i+ j + 1
+    return h_block * j + i + 1
+
 def make_question():
     registerFont(TTFont('GenShinGothic',
                         'GenShinGothic-Light.ttf'))
@@ -32,6 +37,8 @@ def make_question():
 
     # 問題作成
     nonce = np.random.randint(101)
+    # 問題の番号が縦方向か横方向か
+    state = np.random.randint(0, 2)
 
     q_array = np.random.rand(25, 8) + 0.01
     q_array = q_array.tolist()
@@ -68,7 +75,7 @@ def make_question():
             digit = Decimal('0.1')**round_num
             
             answers[i, j] = Decimal(str(result)).quantize(digit, rounding=ROUND_HALF_UP)
-            paper.drawString(x, h - y, f'({w_block * i + j + 1}) {q1} {op_label} {q2} = ?')
+            paper.drawString(x, h - y, f'({question_index(j, i, w_block, h_block, state)}) {q1} {op_label} {q2} = ?')
 
     paper.showPage() 
     paper.showPage() 
@@ -92,7 +99,7 @@ def make_question():
                 q1 = round(q1, 3)
                 q2 = round(q2, 3)
             answer = answers[i, j]
-            paper.drawString(x, h - y, f'({w_block * i + j + 1}) {q1} {op_label} {q2} = {answer}')
+            paper.drawString(x, h - y, f'({question_index(j, i, w_block, h_block, state)}) {q1} {op_label} {q2} = {answer}')
 
     paper.save()
 
